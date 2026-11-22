@@ -84,7 +84,7 @@ $ColorStatusBg   = [System.Drawing.ColorTranslator]::FromHtml("#090D16")
 # Ana Pencere
 $Form = New-Object System.Windows.Forms.Form
 $Form.Text = "Araç Yönetim Paneli"
-$Form.Size = New-Object System.Drawing.Size(760, 560)
+$Form.Size = New-Object System.Drawing.Size(760, 580)
 $Form.StartPosition = "CenterScreen"
 $Form.FormBorderStyle = "FixedSingle"
 $Form.MaximizeBox = $false
@@ -127,23 +127,171 @@ $HeaderPanel.Controls.Add($SubTitleLabel)
 # Alt Durum ve Kontrol Cubugu
 $FooterPanel = New-Object System.Windows.Forms.Panel
 $FooterPanel.Dock = "Bottom"
-$FooterPanel.Height = 58
+$FooterPanel.Height = 68
 $FooterPanel.BackColor = $ColorStatusBg
 $Form.Controls.Add($FooterPanel)
 
+# Gelistirici & Hakkinda Modal Penceresi
+$ShowDeveloperModal = {
+    $Modal = New-Object System.Windows.Forms.Form
+    $Modal.Text = "Geliştirici & Hakkında"
+    $Modal.Size = New-Object System.Drawing.Size(420, 310)
+    $Modal.StartPosition = "CenterParent"
+    $Modal.FormBorderStyle = "FixedDialog"
+    $Modal.MaximizeBox = $false
+    $Modal.MinimizeBox = $false
+    $Modal.BackColor = $ColorBg
+    $Modal.ForeColor = $ColorTextMain
+    $Modal.Font = New-Object System.Drawing.Font("Segoe UI", 9.5)
+
+    $ModalCard = New-Object System.Windows.Forms.Panel
+    $ModalCard.Location = New-Object System.Drawing.Point(20, 18)
+    $ModalCard.Size = New-Object System.Drawing.Size(364, 232)
+    $ModalCard.BackColor = $ColorSurface
+    $Modal.Controls.Add($ModalCard)
+
+    $TopBar = New-Object System.Windows.Forms.Panel
+    $TopBar.Location = New-Object System.Drawing.Point(0, 0)
+    $TopBar.Size = New-Object System.Drawing.Size(364, 4)
+    $TopBar.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#38BDF8")
+    $ModalCard.Controls.Add($TopBar)
+
+    $BadgeLbl = New-Object System.Windows.Forms.Label
+    $BadgeLbl.Text = "GELİŞTİRİCİ & HAKKINDA"
+    $BadgeLbl.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 8, [System.Drawing.FontStyle]::Bold)
+    $BadgeLbl.ForeColor = [System.Drawing.ColorTranslator]::FromHtml("#38BDF8")
+    $BadgeLbl.Location = New-Object System.Drawing.Point(20, 18)
+    $BadgeLbl.AutoSize = $true
+    $ModalCard.Controls.Add($BadgeLbl)
+
+    $NameLbl = New-Object System.Windows.Forms.Label
+    $NameLbl.Text = "Serkan Altın"
+    $NameLbl.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 16, [System.Drawing.FontStyle]::Bold)
+    $NameLbl.ForeColor = $ColorTextMain
+    $NameLbl.Location = New-Object System.Drawing.Point(18, 38)
+    $NameLbl.AutoSize = $true
+    $ModalCard.Controls.Add($NameLbl)
+
+    $RoleLbl = New-Object System.Windows.Forms.Label
+    $RoleLbl.Text = "Araç Yönetim Paneli (Tool Dashboard)`nSosyal medya ve proje profillerine aşağıdan ulaşabilirsiniz."
+    $RoleLbl.Font = New-Object System.Drawing.Font("Segoe UI", 9)
+    $RoleLbl.ForeColor = $ColorTextMuted
+    $RoleLbl.Location = New-Object System.Drawing.Point(20, 74)
+    $RoleLbl.Size = New-Object System.Drawing.Size(324, 38)
+    $ModalCard.Controls.Add($RoleLbl)
+
+    $BtnGitHub = New-Object System.Windows.Forms.Button
+    $BtnGitHub.Text = "🌐  GitHub Profili"
+    $BtnGitHub.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9.5, [System.Drawing.FontStyle]::Bold)
+    $BtnGitHub.Location = New-Object System.Drawing.Point(20, 124)
+    $BtnGitHub.Size = New-Object System.Drawing.Size(156, 38)
+    $BtnGitHub.FlatStyle = "Flat"
+    $BtnGitHub.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#24292F")
+    $BtnGitHub.ForeColor = [System.Drawing.Color]::White
+    $BtnGitHub.FlatAppearance.BorderColor = [System.Drawing.ColorTranslator]::FromHtml("#475569")
+    $BtnGitHub.Cursor = [System.Windows.Forms.Cursors]::Hand
+    $BtnGitHub.Add_Click({
+        Start-Process "https://github.com/serkanaltin"
+    })
+    $ModalCard.Controls.Add($BtnGitHub)
+
+    $BtnLinkedIn = New-Object System.Windows.Forms.Button
+    $BtnLinkedIn.Text = "💼  LinkedIn Profili"
+    $BtnLinkedIn.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9.5, [System.Drawing.FontStyle]::Bold)
+    $BtnLinkedIn.Location = New-Object System.Drawing.Point(188, 124)
+    $BtnLinkedIn.Size = New-Object System.Drawing.Size(156, 38)
+    $BtnLinkedIn.FlatStyle = "Flat"
+    $BtnLinkedIn.BackColor = [System.Drawing.ColorTranslator]::FromHtml("#0A66C2")
+    $BtnLinkedIn.ForeColor = [System.Drawing.Color]::White
+    $BtnLinkedIn.FlatAppearance.BorderColor = [System.Drawing.ColorTranslator]::FromHtml("#0A66C2")
+    $BtnLinkedIn.Cursor = [System.Windows.Forms.Cursors]::Hand
+    $BtnLinkedIn.Add_Click({
+        Start-Process "https://www.linkedin.com/in/serkanaltin/"
+    })
+    $ModalCard.Controls.Add($BtnLinkedIn)
+
+    $BtnCloseModal = New-Object System.Windows.Forms.Button
+    $BtnCloseModal.Text = "Kapat"
+    $BtnCloseModal.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9)
+    $BtnCloseModal.Location = New-Object System.Drawing.Point(20, 176)
+    $BtnCloseModal.Size = New-Object System.Drawing.Size(324, 34)
+    $BtnCloseModal.FlatStyle = "Flat"
+    $BtnCloseModal.BackColor = $ColorBg
+    $BtnCloseModal.ForeColor = $ColorTextMuted
+    $BtnCloseModal.FlatAppearance.BorderColor = $ColorBorder
+    $BtnCloseModal.Cursor = [System.Windows.Forms.Cursors]::Hand
+    $BtnCloseModal.Add_Click({ $Modal.Close() })
+    $ModalCard.Controls.Add($BtnCloseModal)
+
+    [void]$Modal.ShowDialog($Form)
+}
+
+# Sol Alt Gelistirici Bilgi Karti (Serkan Altin)
+$ColorDevAccent     = [System.Drawing.ColorTranslator]::FromHtml("#38BDF8")
+$ColorDevAccentGlow = [System.Drawing.ColorTranslator]::FromHtml("#7DD3FC")
+
+$DevCard = New-Object System.Windows.Forms.Panel
+$DevCard.Location = New-Object System.Drawing.Point(28, 11)
+$DevCard.Size = New-Object System.Drawing.Size(185, 46)
+$DevCard.BackColor = $ColorSurface
+$DevCard.Cursor = [System.Windows.Forms.Cursors]::Hand
+$FooterPanel.Controls.Add($DevCard)
+
+$DevAccentBar = New-Object System.Windows.Forms.Panel
+$DevAccentBar.Location = New-Object System.Drawing.Point(0, 0)
+$DevAccentBar.Size = New-Object System.Drawing.Size(4, 46)
+$DevAccentBar.BackColor = $ColorDevAccent
+$DevAccentBar.Cursor = [System.Windows.Forms.Cursors]::Hand
+$DevCard.Controls.Add($DevAccentBar)
+
+$DevTagLabel = New-Object System.Windows.Forms.Label
+$DevTagLabel.Text = "GELİŞTİRİCİ"
+$DevTagLabel.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 7, [System.Drawing.FontStyle]::Bold)
+$DevTagLabel.ForeColor = $ColorDevAccent
+$DevTagLabel.Location = New-Object System.Drawing.Point(12, 6)
+$DevTagLabel.AutoSize = $true
+$DevTagLabel.Cursor = [System.Windows.Forms.Cursors]::Hand
+$DevCard.Controls.Add($DevTagLabel)
+
+$DevNameLabel = New-Object System.Windows.Forms.Label
+$DevNameLabel.Text = "Serkan Altın  ↗"
+$DevNameLabel.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9.5, [System.Drawing.FontStyle]::Bold)
+$DevNameLabel.ForeColor = $ColorTextMain
+$DevNameLabel.Location = New-Object System.Drawing.Point(11, 21)
+$DevNameLabel.AutoSize = $true
+$DevNameLabel.Cursor = [System.Windows.Forms.Cursors]::Hand
+$DevCard.Controls.Add($DevNameLabel)
+
+$OnDevEnter = {
+    $DevCard.BackColor = $ColorSurfaceHov
+    $DevAccentBar.BackColor = $ColorDevAccentGlow
+    $DevTagLabel.ForeColor = $ColorDevAccentGlow
+}
+$OnDevLeave = {
+    $DevCard.BackColor = $ColorSurface
+    $DevAccentBar.BackColor = $ColorDevAccent
+    $DevTagLabel.ForeColor = $ColorDevAccent
+}
+
+foreach ($ctrl in @($DevCard, $DevAccentBar, $DevTagLabel, $DevNameLabel)) {
+    $ctrl.Add_MouseEnter($OnDevEnter)
+    $ctrl.Add_MouseLeave($OnDevLeave)
+    $ctrl.Add_Click($ShowDeveloperModal)
+}
+
 $StatusLabel = New-Object System.Windows.Forms.Label
-$StatusLabel.Text = "Hazır — Klasör: $BaseDir"
+$StatusLabel.Text = "Hazır"
 $StatusLabel.Font = New-Object System.Drawing.Font("Segoe UI", 9)
 $StatusLabel.ForeColor = $ColorTextMuted
-$StatusLabel.Location = New-Object System.Drawing.Point(28, 19)
-$StatusLabel.Size = New-Object System.Drawing.Size(440, 22)
+$StatusLabel.Location = New-Object System.Drawing.Point(226, 24)
+$StatusLabel.Size = New-Object System.Drawing.Size(242, 22)
 $FooterPanel.Controls.Add($StatusLabel)
 
 $BtnRefresh = New-Object System.Windows.Forms.Button
 $BtnRefresh.Text = "↻ Durumu Yenile"
 $BtnRefresh.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9)
-$BtnRefresh.Size = New-Object System.Drawing.Size(120, 34)
-$BtnRefresh.Location = New-Object System.Drawing.Point(476, 12)
+$BtnRefresh.Size = New-Object System.Drawing.Size(120, 36)
+$BtnRefresh.Location = New-Object System.Drawing.Point(476, 16)
 $BtnRefresh.FlatStyle = "Flat"
 $BtnRefresh.BackColor = $ColorSurface
 $BtnRefresh.ForeColor = $ColorTextMain
@@ -154,8 +302,8 @@ $FooterPanel.Controls.Add($BtnRefresh)
 $BtnOpenFolder = New-Object System.Windows.Forms.Button
 $BtnOpenFolder.Text = "📁 Klasörü Aç"
 $BtnOpenFolder.Font = New-Object System.Drawing.Font("Segoe UI Semibold", 9)
-$BtnOpenFolder.Size = New-Object System.Drawing.Size(110, 34)
-$BtnOpenFolder.Location = New-Object System.Drawing.Point(606, 12)
+$BtnOpenFolder.Size = New-Object System.Drawing.Size(110, 36)
+$BtnOpenFolder.Location = New-Object System.Drawing.Point(606, 16)
 $BtnOpenFolder.FlatStyle = "Flat"
 $BtnOpenFolder.BackColor = $ColorSurface
 $BtnOpenFolder.ForeColor = $ColorTextMain
