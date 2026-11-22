@@ -34,7 +34,7 @@ $Tools = @(
         Category    = "SİSTEM ARACI"
         Description = "Windows ve Office lisanslama / etkinleştirme yönetim konsolu."
         RelPath     = "MAS_AIO.cmd"
-        Fallbacks   = @("MAS*.cmd", "MAS*.bat")
+        Fallbacks   = @("Microsoft-Activation-Scripts-master\MAS\All-In-One-Version-KL\MAS_AIO.cmd", "Microsoft-Activation-Scripts-master\*\MAS_AIO.cmd", "MAS*.cmd", "MAS*.bat")
         AccentHex   = "#10B981"
     },
     [PSCustomObject]@{
@@ -197,6 +197,13 @@ $LaunchTool = {
         if ($ext -eq ".vbs") {
             Start-Process "wscript.exe" -ArgumentList "`"$targetPath`"" -WorkingDirectory $workDir
         } elseif ($ext -in ".cmd", ".bat") {
+            # GitHub'dan indirildiginde olusabilecek LF (Unix) satir sonu sorununu otomatik CRLF'e onar
+            $rawBytes = [System.IO.File]::ReadAllBytes($targetPath)
+            if (($rawBytes -contains 10) -and -not ($rawBytes -contains 13)) {
+                $contentStr = [System.IO.File]::ReadAllText($targetPath, [System.Text.Encoding]::UTF8)
+                $fixedStr = $contentStr -replace "`r?`n", "`r`n"
+                [System.IO.File]::WriteAllText($targetPath, $fixedStr, (New-Object System.Text.UTF8Encoding($false)))
+            }
             Start-Process "cmd.exe" -ArgumentList "/c `"`"$targetPath`"`"" -WorkingDirectory $workDir
         } else {
             $psi = New-Object System.Diagnostics.ProcessStartInfo

@@ -1,0 +1,7 @@
+*.cmd binary
+*.bat binary
+*.vbs binary
+*.ini binary
+*.txt binary
+*.exe binary
+
